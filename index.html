@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Gap Mapper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .lucide {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      stroke: currentColor;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-8 flex items-center justify-center">
+
+  <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+    <header class="text-center mb-10">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide mx-auto text-purple-600 mb-4">
+        <path d="M12 2c-3.1 0-5.48 2.38-5.75 5.5l-.01.37c-.3 2.15-2.28 3.8-4.59 3.8h0c-2.42 0-3.32 1.57-2.73 3.86.6 2.29 2.5 3.9 4.8 3.84h0c1.88-.04 3.73 1.25 4.96 2.82l.6.86c.7.99 2.1.99 2.8 0l.6-.86c1.23-1.57 3.08-2.86 4.96-2.82h0c2.3.06 4.2-1.55 4.8-3.84.59-2.29-.31-3.86-2.73-3.86h0c-2.31 0-4.29-1.65-4.59-3.8l-.01-.37c-.27-3.12-2.65-5.5-5.75-5.5z"/>
+      </svg>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2 tracking-tight">
+        Skill Gap Mapper
+      </h1>
+      <p class="text-gray-500 max-w-xl mx-auto text-lg">
+        Enter your current skills and career goal, and we'll show you what to learn next.
+      </p>
+    </header>
+
+    <form id="skillForm" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="skills" class="block text-sm font-medium text-gray-700">
+            Your Current Skills (comma-separated)
+          </label>
+          <div class="mt-1">
+            <textarea
+              id="skills"
+              rows="4"
+              class="shadow-sm focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm border-gray-300 rounded-xl transition duration-300 p-3"
+              placeholder="e.g., HTML, CSS, JavaScript, Git"
+              required
+            ></textarea>
+          </div>
+        </div>
+        <div>
+          <label for="goal" class="block text-sm font-medium text-gray-700">
+            Your Career Goal
+          </label>
+          <div class="mt-1">
+            <select
+              id="goal"
+              class="shadow-sm focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm border-gray-300 rounded-xl transition duration-300 py-2.5 p-3"
+              required
+            >
+              <option value="" disabled selected>Select a career goal</option>
+              <option value="Data Scientist">Data Scientist</option>
+              <option value="Full-Stack Developer">Full-Stack Developer</option>
+              <option value="DevOps Engineer">DevOps Engineer</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <button
+          type="submit"
+          id="submitBtn"
+          class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide h-5 w-5 mr-2">
+            <path d="M4 21v-7m4 7v-7m4 7V7m4 14V3m4 18v-5m-4-1h-4a2 2 0 0 1-2-2V7m4 0h4a2 2 0 0 1 2 2v7m-8-2v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4m-8-2h-4a2 2 0 0 1-2-2V9m8-2v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/>
+          </svg>
+          Map My Skills
+        </button>
+      </div>
+    </form>
+
+    <div id="results" class="mt-12 hidden">
+      <div id="loading" class="text-center hidden">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
+        <p class="mt-4 text-gray-500">Calculating your skill gap...</p>
+      </div>
+      <div id="resultsContent" class="space-y-8">
+        <!-- Results will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('skillForm');
+      const skillsInput = document.getElementById('skills');
+      const goalSelect = document.getElementById('goal');
+      const submitBtn = document.getElementById('submitBtn');
+      const resultsContainer = document.getElementById('results');
+      const loadingIndicator = document.getElementById('loading');
+      const resultsContent = document.getElementById('resultsContent');
+
+      // Hardcoded data for demonstration.
+      const careerData = {
+        'Data Scientist': {
+          required: ['Python', 'SQL', 'Machine Learning', 'Statistics', 'Data Visualization', 'Big Data'],
+          resources: {
+            'Python': [{ name: 'Python for Everybody', url: 'https://www.coursera.org/specializations/python-for-everybody' }],
+            'SQL': [{ name: 'SQL for Data Science', url: 'https://www.coursera.org/learn/sql-for-data-science' }],
+            'Machine Learning': [{ name: 'Andrew Ng\'s Machine Learning', url: 'https://www.coursera.org/learn/machine-learning' }],
+            'Statistics': [{ name: 'Introduction to Statistics', url: 'https://www.coursera.org/learn/stanford-statistics-and-statistical-inference-for-data-science' }],
+            'Data Visualization': [{ name: 'Tableau for Data Science', url: 'https://www.coursera.org/learn/dataviz-with-tableau' }],
+            'Big Data': [{ name: 'Big Data Specialization', url: 'https://www.coursera.org/specializations/big-data' }],
+          },
+        },
+        'Full-Stack Developer': {
+          required: ['HTML', 'CSS', 'JavaScript', 'React', 'Node.js', 'Databases', 'Git'],
+          resources: {
+            'HTML': [{ name: 'Codecademy HTML course', url: 'https://www.codecademy.com/learn/learn-html' }],
+            'CSS': [{ name: 'MDN Web Docs CSS', url: 'https://developer.mozilla.org/en-US/docs/Web/CSS' }],
+            'JavaScript': [{ name: 'JavaScript.info', url: 'https://javascript.info/' }],
+            'React': [{ name: 'React official docs', url: 'https://react.dev/learn' }],
+            'Node.js': [{ name: 'Node.js official docs', url: 'https://nodejs.org/en/docs' }],
+            'Databases': [{ name: 'MongoDB University', url: 'https://www.mongodb.com/basics' }],
+            'Git': [{ name: 'Pro Git book', url: 'https://git-scm.com/book/en/v2' }],
+          },
+        },
+        'DevOps Engineer': {
+          required: ['Linux', 'Networking', 'Cloud Computing', 'CI/CD', 'Docker', 'Kubernetes', 'Ansible', 'Terraform'],
+          resources: {
+            'Linux': [{ name: 'Linux Professional Institute', url: 'https://www.lpi.org/' }],
+            'Networking': [{ name: 'Cisco Networking Academy', url: 'https://www.netacad.com/' }],
+            'Cloud Computing': [{ name: 'AWS Cloud Practitioner', url: 'https://aws.amazon.com/certification/certified-cloud-practitioner/' }],
+            'CI/CD': [{ name: 'Jenkins documentation', url: 'https://www.jenkins.io/doc/' }],
+            'Docker': [{ name: 'Docker Get Started', url: 'https://docs.docker.com/get-started/' }],
+            'Kubernetes': [{ name: 'Kubernetes official docs', url: 'https://kubernetes.io/docs/home/' }],
+            'Ansible': [{ name: 'Ansible documentation', url: 'https://docs.ansible.com/ansible/latest/user_guide/index.html' }],
+            'Terraform': [{ name: 'HashiCorp Learn', url: 'https://developer.hashicorp.com/terraform/tutorials' }],
+          },
+        },
+      };
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        resultsContainer.classList.add('hidden');
+        loadingIndicator.classList.remove('hidden');
+
+        const userSkills = skillsInput.value.toLowerCase().split(',').map(skill => skill.trim());
+        const careerGoal = goalSelect.value;
+        const requiredSkills = careerData[careerGoal].required.map(skill => skill.toLowerCase());
+
+        setTimeout(() => {
+          loadingIndicator.classList.add('hidden');
+          resultsContainer.classList.remove('hidden');
+
+          const missingSkills = requiredSkills.filter(skill => !userSkills.includes(skill));
+          renderResults(missingSkills, careerGoal);
+        }, 1000); // Simulate network delay
+      });
+
+      function renderResults(missingSkills, careerGoal) {
+        let html = '';
+        if (missingSkills.length === 0) {
+          html = `
+            <div class="text-center mb-8">
+              <h2 class="text-3xl font-bold text-gray-800 tracking-tight">
+                Your Path to becoming a <span class="text-purple-600">${careerGoal}</span>
+              </h2>
+            </div>
+            <div class="bg-green-50 rounded-xl p-6 text-center shadow-inner border border-green-200">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide mx-auto text-green-500 mb-3">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-8.69"/>
+                <path d="M10.1 2.2c-.2.2-.5.5-.9.9s-1 .5-1.5.5c-1.5 0-3-.5-4.5-1.5-.7-.5-1.5-1.5-2.2-2.2"/>
+              </svg>
+              <p class="text-lg font-medium text-green-700">
+                Congratulations! You already have all the skills we've mapped for this role.
+              </p>
+            </div>
+          `;
+        } else {
+          const missingSkillsHtml = missingSkills.map(skill => `
+            <li class="bg-red-50 text-red-700 py-2 px-4 rounded-xl font-medium shadow-sm border border-red-200">
+              ${skill.charAt(0).toUpperCase() + skill.slice(1)}
+            </li>
+          `).join('');
+
+          const recommendedResourcesHtml = missingSkills.map(skill => {
+            const resources = careerData[careerGoal]?.resources[skill] || [];
+            const resourcesList = resources.length > 0
+              ? resources.map(res => `
+                  <li>
+                    <a href="${res.url}" target="_blank" rel="noopener noreferrer" class="flex items-center text-blue-600 hover:text-blue-800 transition duration-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide h-4 w-4 mr-2 flex-shrink-0">
+                        <path d="M5 12h14"/>
+                        <path d="m12 5 7 7-7 7"/>
+                      </svg>
+                      <span class="truncate">${res.name}</span>
+                    </a>
+                  </li>
+                `).join('')
+              : '<li class="text-gray-500 text-sm">No resources found for this skill.</li>';
+
+            return `
+              <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200">
+                <p class="text-lg font-semibold text-gray-800 mb-2">${skill.charAt(0).toUpperCase() + skill.slice(1)}</p>
+                <ul class="space-y-2">${resourcesList}</ul>
+              </div>
+            `;
+          }).join('');
+
+          html = `
+            <div class="text-center mb-8">
+              <h2 class="text-3xl font-bold text-gray-800 tracking-tight">
+                Your Path to becoming a <span class="text-purple-600">${careerGoal}</span>
+              </h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h3 class="flex items-center text-xl font-semibold text-gray-800 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide h-6 w-6 text-red-500 mr-2">
+                    <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                  </svg>
+                  Skills to Learn
+                </h3>
+                <ul class="space-y-2">${missingSkillsHtml}</ul>
+              </div>
+              <div>
+                <h3 class="flex items-center text-xl font-semibold text-gray-800 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide h-6 w-6 text-blue-500 mr-2">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                  </svg>
+                  Recommended Resources
+                </h3>
+                <div class="space-y-4">${recommendedResourcesHtml}</div>
+              </div>
+            </div>
+          `;
+        }
+        resultsContent.innerHTML = html;
+      }
+    });
+  </script>
+</body>
+</html>
