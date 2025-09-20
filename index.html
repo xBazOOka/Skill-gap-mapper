@@ -69,6 +69,13 @@
               <option value="Data Scientist">Data Scientist</option>
               <option value="Full-Stack Developer">Full-Stack Developer</option>
               <option value="DevOps Engineer">DevOps Engineer</option>
+              <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+              <option value="Blockchain Developer">Blockchain Developer</option>
+              <option value="AI Engineer">AI Engineer</option>
+              <option value="Cloud Architect">Cloud Architect</option>
+              <option value="Mobile App Developer">Mobile App Developer</option>
+              <option value="Game Developer">Game Developer</option>
+              <option value="IoT Engineer">IoT Engineer</option>
             </select>
           </div>
         </div>
@@ -146,8 +153,86 @@
             'Terraform': [{ name: 'HashiCorp Learn', url: 'https://developer.hashicorp.com/terraform/tutorials' }],
           },
         },
-      };
 
+        'Cybersecurity Analyst': {
+    required: ['Networking', 'Linux', 'Python', 'Penetration Testing', 'Cryptography', 'Threat Analysis'],
+    resources: {
+      'Networking': [{ name: 'Cisco Networking Academy', url: 'https://www.netacad.com/' }],
+      'Linux': [{ name: 'Linux Professional Institute', url: 'https://www.lpi.org/' }],
+      'Python': [{ name: 'Python for Cybersecurity', url: 'https://www.coursera.org/learn/python-for-cybersecurity' }],
+      'Penetration Testing': [{ name: 'Certified Ethical Hacker', url: 'https://www.eccouncil.org/programs/certified-ethical-hacker-ceh/' }],
+      'Cryptography': [{ name: 'Intro to Cryptography', url: 'https://www.coursera.org/learn/crypto' }],
+      'Threat Analysis': [{ name: 'MITRE ATT&CK', url: 'https://attack.mitre.org/' }],
+       },
+      },
+      'Blockchain Developer': {
+    required: ['Solidity', 'Smart Contracts', 'Ethereum', 'Web3.js', 'Blockchain Security', 'Consensus Algorithms'],
+    resources: {
+      'Solidity': [{ name: 'Solidity Docs', url: 'https://docs.soliditylang.org/' }],
+      'Smart Contracts': [{ name: 'Ethereum Tutorials', url: 'https://ethereum.org/en/developers/tutorials/' }],
+      'Ethereum': [{ name: 'Ethereum.org Tutorials', url: 'https://ethereum.org/en/developers/docs/' }],
+      'Web3.js': [{ name: 'Web3.js Guide', url: 'https://web3js.readthedocs.io/' }],
+      'Blockchain Security': [{ name: 'Blockchain Security Basics', url: 'https://www.coursera.org/learn/blockchain-security' }],
+      'Consensus Algorithms': [{ name: 'Consensus Explained', url: 'https://www.ibm.com/topics/consensus-algorithm' }],
+    },
+     },
+
+     'AI Engineer': {
+    required: ['Python', 'Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision', 'TensorFlow'],
+    resources: {
+      'Python': [{ name: 'Python for AI', url: 'https://www.coursera.org/learn/python-for-ai' }],
+      'Machine Learning': [{ name: 'Andrew Ng ML', url: 'https://www.coursera.org/learn/machine-learning' }],
+      'Deep Learning': [{ name: 'Deep Learning Specialization', url: 'https://www.coursera.org/specializations/deep-learning' }],
+      'NLP': [{ name: 'Natural Language Processing', url: 'https://www.coursera.org/learn/natural-language-processing' }],
+      'Computer Vision': [{ name: 'Computer Vision Basics', url: 'https://www.coursera.org/learn/computer-vision-basics' }],
+      'TensorFlow': [{ name: 'TensorFlow Guide', url: 'https://www.tensorflow.org/tutorials' }],
+    },
+    },
+     'Cloud Architect': {
+    required: ['Cloud Computing', 'AWS', 'Azure', 'GCP', 'Networking', 'Security', 'DevOps'],
+    resources: {
+      'Cloud Computing': [{ name: 'AWS Cloud Practitioner', url: 'https://aws.amazon.com/certification/certified-cloud-practitioner/' }],
+      'AWS': [{ name: 'AWS Solutions Architect', url: 'https://aws.amazon.com/certification/certified-solutions-architect-associate/' }],
+      'Azure': [{ name: 'Microsoft Azure Fundamentals', url: 'https://learn.microsoft.com/en-us/certifications/azure-fundamentals/' }],
+      'GCP': [{ name: 'Google Cloud Fundamentals', url: 'https://cloud.google.com/training/cloud-fundamentals' }],
+      'Networking': [{ name: 'Cisco Networking Academy', url: 'https://www.netacad.com/' }],
+      'Security': [{ name: 'AWS Security Best Practices', url: 'https://aws.amazon.com/architecture/security-best-practices/' }],
+      'DevOps': [{ name: 'DevOps Basics', url: 'https://www.coursera.org/learn/devops-culture-and-mindset' }],
+    },
+  },
+  'Mobile App Developer': {
+    required: ['Java/Kotlin', 'Swift', 'Flutter', 'React Native', 'UI/UX Design', 'APIs'],
+    resources: {
+      'Java/Kotlin': [{ name: 'Android Development with Kotlin', url: 'https://developer.android.com/kotlin' }],
+      'Swift': [{ name: 'Swift Programming', url: 'https://developer.apple.com/learn/curriculum/' }],
+      'Flutter': [{ name: 'Flutter Docs', url: 'https://flutter.dev/docs' }],
+      'React Native': [{ name: 'React Native Docs', url: 'https://reactnative.dev/docs/getting-started' }],
+      'UI/UX Design': [{ name: 'Coursera UI/UX', url: 'https://www.coursera.org/learn/ui-ux-design' }],
+      'APIs': [{ name: 'REST API Tutorial', url: 'https://restfulapi.net/' }],
+    },
+  },
+  'Game Developer': {
+    required: ['C++', 'Unity', 'Unreal Engine', '3D Modeling', 'Physics Engine', 'AI for Games'],
+    resources: {
+      'C++': [{ name: 'C++ Tutorial', url: 'https://www.learncpp.com/' }],
+      'Unity': [{ name: 'Unity Learn', url: 'https://learn.unity.com/' }],
+      'Unreal Engine': [{ name: 'Unreal Engine Docs', url: 'https://docs.unrealengine.com/' }],
+      '3D Modeling': [{ name: 'Blender Tutorials', url: 'https://www.blender.org/support/tutorials/' }],
+      'Physics Engine': [{ name: 'Game Physics Basics', url: 'https://www.coursera.org/learn/game-physics' }],
+      'AI for Games': [{ name: 'Game AI Programming', url: 'https://www.coursera.org/learn/game-ai' }],
+    },
+  },
+
+  'IoT Engineer': {
+    required: ['C', 'Python', 'Sensors', 'Networking', 'Embedded Systems', 'Cloud Integration'],
+    resources: {
+      'C': [{ name: 'Learn C Programming', url: 'https://www.learn-c.org/' }],
+      'Python': [{ name: 'Python Basics', url: 'https://www.coursera.org/learn/python' }],
+      'Sensors': [{ name: 'IoT Sensor Basics', url: 'https://www.coursera.org/learn/iot-sensors' }],
+      'Networking': [{ name: 'Networking Basics', url:'' }]
+      },
+    },
+  };
       form.addEventListener('submit', (e) => {
         e.preventDefault();
 
