@@ -22,15 +22,20 @@
       fill: none;
       stroke: currentColor;
     }
+
+    #chatbot {
+  width: 300px;
+  height: 400px;
+  font-size: 14px;
+   }
+
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 p-8 flex items-center justify-center">
 
-  <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+  <div class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8 md:p-12 transition duration-300">
     <header class="text-center mb-10">
-      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide mx-auto text-purple-600 mb-4">
-        <path d="M12 2c-3.1 0-5.48 2.38-5.75 5.5l-.01.37c-.3 2.15-2.28 3.8-4.59 3.8h0c-2.42 0-3.32 1.57-2.73 3.86.6 2.29 2.5 3.9 4.8 3.84h0c1.88-.04 3.73 1.25 4.96 2.82l.6.86c.7.99 2.1.99 2.8 0l.6-.86c1.23-1.57 3.08-2.86 4.96-2.82h0c2.3.06 4.2-1.55 4.8-3.84.59-2.29-.31-3.86-2.73-3.86h0c-2.31 0-4.29-1.65-4.59-3.8l-.01-.37c-.27-3.12-2.65-5.5-5.75-5.5z"/>
-      </svg>
+      
       <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2 tracking-tight">
         Skill Gap Mapper
       </h1>
@@ -106,7 +111,19 @@
     </div>
   </div>
 
+   <!-- AI Mentor Chatbot -->
+  <div id="chatbot" class="fixed bottom-3 right-3 w-70 h-90 bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden gap-10">
+    <div class="bg-purple-600 text-white p-3 font-semibold">AI Mentor</div>
+    <div id="chatContent" class="flex-1 p-3 overflow-y-auto"></div>
+    <div class="p-3 flex gap-1">
+      <input id="userInput" type="text" placeholder="Ask me anything..." class="flex-1 border rounded-xl p-2 w-5">
+      <button id="sendBtn" class="bg-purple-600 text-white px-4 rounded-xl">Send</button>
+    </div>
+  </div>
+
   <script>
+
+
     document.addEventListener('DOMContentLoaded', () => {
       const form = document.getElementById('skillForm');
       const skillsInput = document.getElementById('skills');
@@ -348,6 +365,91 @@
         resultsContent.innerHTML = html;
       }
     });
+
+    // --- AI Mentor Chatbot Logic ---
+const chatContent = document.getElementById('chatContent');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+
+// Extract skill resources from careerData
+const skillResources = {
+  'Data Scientist': {
+    'Python': [{name:'Python for Everybody', url:'https://www.coursera.org/specializations/python-for-everybody'}],
+    'SQL': [{name:'SQL for Data Science', url:'https://www.coursera.org/learn/sql-for-data-science'}],
+    'Machine Learning': [{name:'Andrew Ng ML', url:'https://www.coursera.org/learn/machine-learning'}],
+    'Statistics': [{name:'Intro to Statistics', url:'https://www.coursera.org/learn/stanford-statistics-and-statistical-inference-for-data-science'}],
+    'Data Visualization': [{name:'Tableau for Data Science', url:'https://www.coursera.org/learn/dataviz-with-tableau'}],
+    'Big Data': [{name:'Big Data Specialization', url:'https://www.coursera.org/specializations/big-data'}],
+  },
+  'Full-Stack Developer': {
+    'HTML': [{name:'Codecademy HTML', url:'https://www.codecademy.com/learn/learn-html'}],
+    'CSS': [{name:'MDN CSS', url:'https://developer.mozilla.org/en-US/docs/Web/CSS'}],
+    'JavaScript': [{name:'JavaScript.info', url:'https://javascript.info/'}],
+    'React': [{name:'React official docs', url:'https://react.dev/learn'}],
+    'Node.js': [{name:'Node.js docs', url:'https://nodejs.org/en/docs'}],
+    'Databases': [{name:'MongoDB University', url:'https://www.mongodb.com/basics'}],
+    'Git': [{name:'Pro Git book', url:'https://git-scm.com/book/en/v2'}],
+  },
+  // Add other careers similarly...
+};
+
+// Store the current missing skills for chatbot reference
+let currentMissingSkills = [];
+let currentCareerGoal = "";
+
+// Update missing skills after form submission
+function updateMissingSkills(missingSkills, careerGoal){
+  currentMissingSkills = missingSkills;
+  currentCareerGoal = careerGoal;
+}
+
+// Send button click
+sendBtn.addEventListener('click', async () => {
+  const message = userInput.value.trim();
+  if(!message) return;
+
+  chatContent.innerHTML += `<div class="text-right mb-2"><span class="bg-purple-100 text-purple-800 px-3 py-2 rounded-xl inline-block">${message}</span></div>`;
+  userInput.value = '';
+
+  const aiResponse = await getAIResponse(message);
+  chatContent.innerHTML += `<div class="text-left mb-2"><span class="bg-gray-100 px-3 py-2 rounded-xl inline-block">${aiResponse}</span></div>`;
+  chatContent.scrollTop = chatContent.scrollHeight;
+});
+
+// AI response function
+async function getAIResponse(message){
+  message = message.toLowerCase();
+
+  // Check if message matches a missing skill
+  for(const skill of currentMissingSkills){
+    if(message.includes(skill.toLowerCase())){
+      const resources = skillResources[currentCareerGoal][skill] || [];
+      if(resources.length > 0){
+        let resHtml = resources.map(r => `${r.name} (${r.url})`).join(', ');
+        return `For ${skill}, you can check out: ${resHtml}`;
+      } else {
+        return `I don't have resources for ${skill} right now, but keep learning!`;
+      }
+    }
+  }
+
+  // Fallback responses for general guidance
+  const generalResponses = {
+    "python":"Start with Python basics and then libraries like pandas, numpy, scikit-learn.",
+    "javascript":"Learn ES6+, DOM manipulation, and frameworks like React.",
+    "sql":"Practice queries, joins, and database design.",
+    "default":"Keep learning step by step. Ask me about any missing skill to get resources."
+  };
+
+  for(const key in generalResponses){
+    if(message.includes(key)) return generalResponses[key];
+  }
+
+  return generalResponses["default"];
+}
+
+updateMissingSkills(missingSkills, careerGoal)
+
   </script>
 </body>
 </html>
