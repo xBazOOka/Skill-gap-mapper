@@ -76,6 +76,7 @@
               <option value="Mobile App Developer">Mobile App Developer</option>
               <option value="Game Developer">Game Developer</option>
               <option value="IoT Engineer">IoT Engineer</option>
+               <option value="Data Engineer">Data Engineer</option>
             </select>
           </div>
         </div>
@@ -229,9 +230,23 @@
       'C': [{ name: 'Learn C Programming', url: 'https://www.learn-c.org/' }],
       'Python': [{ name: 'Python Basics', url: 'https://www.coursera.org/learn/python' }],
       'Sensors': [{ name: 'IoT Sensor Basics', url: 'https://www.coursera.org/learn/iot-sensors' }],
-      'Networking': [{ name: 'Networking Basics', url:'' }]
-      },
+      'Networking': [{ name: 'Networking Basics', url: 'https://www.coursera.org/learn/computer-networking' }],
+      'Embedded Systems': [{ name: 'Embedded Systems', url: 'https://www.edx.org/course/embedded-systems' }],
+      'Cloud Integration': [{ name: 'IoT Cloud Platforms', url: 'https://www.coursera.org/learn/iot-cloud-platforms' }],
     },
+  },
+  'Data Engineer': {
+    required: ['Python', 'SQL', 'ETL', 'Big Data', 'Data Warehousing', 'Spark', 'Airflow'],
+    resources: {
+      'Python': [{ name: 'Python for Data Engineering', url: 'https://www.coursera.org/learn/python-data-engineering' }],
+      'SQL': [{ name: 'SQL for Data Science', url: 'https://www.coursera.org/learn/sql-for-data-science' }],
+      'ETL': [{ name: 'ETL Basics', url: 'https://www.coursera.org/learn/etl-data-pipelines' }],
+      'Big Data': [{ name: 'Big Data Specialization', url: 'https://www.coursera.org/specializations/big-data' }],
+      'Data Warehousing': [{ name: 'Data Warehousing', url: 'https://www.coursera.org/learn/data-warehousing' }],
+      'Spark': [{ name: 'Apache Spark Tutorial', url: 'https://spark.apache.org/docs/latest/' }],
+      'Airflow': [{ name: 'Airflow Docs', url: 'https://airflow.apache.org/docs/apache-airflow/stable/' }],
+    },
+  },
   };
       form.addEventListener('submit', (e) => {
         e.preventDefault();
